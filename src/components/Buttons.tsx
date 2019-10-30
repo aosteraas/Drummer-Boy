@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
-import bass from '../audio/bass.wav';
-import tone from '../audio/tone.wav';
-import slap from '../audio/open-slap.wav';
+import { bass, tone, slap } from '../audio';
+// import bass from '../audio/bass.wav';
+// import tone from '../audio/tone.wav';
+// import slap from '../audio/open-slap.wav';
 
 const Button = styled.button`
   color: #09d3ac;
