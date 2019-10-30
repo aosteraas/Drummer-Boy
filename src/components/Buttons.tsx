@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { bass, tone, slap } from '../audio';
-// import bass from '../audio/bass.wav';
-// import tone from '../audio/tone.wav';
-// import slap from '../audio/open-slap.wav';
+import { ButtonRow } from '../styles/ButtonRow';
 
 const Button = styled.button`
   color: #09d3ac;
@@ -13,12 +11,6 @@ const Button = styled.button`
   width: 5rem;
   height: 5rem;
   font-size: 1.5rem;
-`;
-
-const ButtonRow = styled.section`
-  display: flex;
-  width: 50vw;
-  justify-content: space-evenly;
 `;
 
 const Kbd = styled.kbd`
