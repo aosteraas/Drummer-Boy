@@ -8,7 +8,6 @@ export interface Actions {
   name: string;
   key: string;
   keyCode: number;
-  audio: HTMLAudioElement;
   sound: SoundType;
 }
 

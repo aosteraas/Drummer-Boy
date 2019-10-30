@@ -7,19 +7,25 @@ import { SoundType, Actions, UseDrums } from '../types/DrumTypes';
 export function useDrums(): UseDrums {
   // the actions we support
   const actions: Actions[] = [
-    { name: 'Bass', key: 'B', keyCode: 66, audio: new Audio(bass), sound: SoundType.BASS },
-    { name: 'Tone', key: 'T', keyCode: 84, audio: new Audio(tone), sound: SoundType.TONE },
-    { name: 'Slap', key: 'S', keyCode: 83, audio: new Audio(slap), sound: SoundType.SLAP }
+    { name: 'Bass', key: 'B', keyCode: 66, sound: SoundType.BASS },
+    { name: 'Tone', key: 'T', keyCode: 84, sound: SoundType.TONE },
+    { name: 'Slap', key: 'S', keyCode: 83, sound: SoundType.SLAP }
   ];
-  // various types of slaps
+
   const slaps = [
-    new Audio(closedSlap),
-    new Audio(fingerSlap),
-    new Audio(mutedSlap),
-    new Audio(slap),
-    new Audio(fingerTone)
+    { audio: new Audio(closedSlap), type: SoundType.SLAP },
+    { audio: new Audio(fingerSlap), type: SoundType.SLAP },
+    { audio: new Audio(mutedSlap), type: SoundType.SLAP },
+    { audio: new Audio(slap), type: SoundType.SLAP },
+    { audio: new Audio(fingerTone), type: SoundType.SLAP }
   ];
-  const tones = [new Audio(tone), new Audio(fingerTone)];
+
+  const tones = [
+    { audio: new Audio(tone), type: SoundType.TONE },
+    { audio: new Audio(fingerTone), type: SoundType.TONE }
+  ];
+
+  const sounds = [...slaps, ...tones, { audio: new Audio(bass), type: SoundType.BASS }];
   // valid keycodes that we should respond to.
   const keyCodes = actions.map(ac => ac.keyCode);
 
@@ -32,20 +38,11 @@ export function useDrums(): UseDrums {
       const keyCode = parseKeyCode(e);
       if (!keyCodes.includes(keyCode)) return;
 
-      const { audio, sound } = actions.find(x => x.keyCode === keyCode)!;
+      const { sound } = actions.find(x => x.keyCode === keyCode)!;
+      const audio = getSound(sound)!;
 
-      if (sound === SoundType.SLAP) {
-        const slap = slaps[~~(slaps.length * Math.random())];
-        slap.currentTime = 0;
-        slap.play();
-      } else if (sound === SoundType.TONE) {
-        const tone = tones[~~(tones.length * Math.random())];
-        tone.currentTime = 0;
-        tone.play();
-      } else {
-        audio.currentTime = 0;
-        audio.play();
-      }
+      audio.currentTime = 0;
+      audio.play();
     },
     [actions, keyCodes, slaps]
   );
@@ -61,6 +58,11 @@ export function useDrums(): UseDrums {
       return e;
     }
     return e.keyCode;
+  };
+
+  const getSound = (soundType: SoundType) => {
+    const matches = sounds.filter(s => s.type === soundType);
+    return matches[~~(matches.length * Math.random())].audio;
   };
 
   return { playSound, actions };
