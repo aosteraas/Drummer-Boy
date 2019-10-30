@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import { bass, closedSlap, fingerSlap, fingerTone, mutedSlap, slap, tone } from '../audio';
 /**
  *
  */
-export function useDrums() {
-  const actions = [
+export function useDrums(): UseDrums {
+  const actions: Actions[] = [
     { name: 'Bass', key: 'B', keyCode: 66, audio: bass },
     { name: 'Tone', key: 'T', keyCode: 84, audio: tone },
     { name: 'Slap', key: 'S', keyCode: 83, audio: slap }
@@ -26,5 +27,17 @@ export function useDrums() {
     audio.play();
   };
 
-  return { playSound };
+  return { playSound, actions };
+}
+
+interface Actions {
+  name: string;
+  key: string;
+  keyCode: number;
+  audio: any;
+}
+
+interface UseDrums {
+  playSound: (e: number | KeyboardEvent) => void;
+  actions: Actions[];
 }

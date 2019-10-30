@@ -1,17 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { bass, tone, slap } from '../audio';
-import { ButtonRow } from '../styles/ButtonRow';
-
-const Button = styled.button`
-  color: #09d3ac;
-  border: 3px solid #09d3ac;
-  border-radius: 3px;
-  background: transparent;
-  width: 5rem;
-  height: 5rem;
-  font-size: 1.5rem;
-`;
+import { ButtonRow, Button } from '../styles/ButtonRow';
 
 const Kbd = styled.kbd`
   display: block;
