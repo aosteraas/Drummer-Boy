@@ -29,6 +29,15 @@ export function useDrums(): UseDrums {
   // valid keycodes that we should respond to.
   const keyCodes = actions.map(ac => ac.keyCode);
 
+  // Returns a random sound of the given type
+  const getSound = useCallback(
+    (soundType: SoundType) => {
+      const matches = sounds.filter(s => s.type === soundType);
+      return matches[~~(matches.length * Math.random())].audio;
+    },
+    [sounds]
+  );
+
   /**
    * Plays a sound on valid keypress.
    * @param e a number or keyboard event
@@ -39,12 +48,12 @@ export function useDrums(): UseDrums {
       if (!keyCodes.includes(keyCode)) return;
 
       const { sound } = actions.find(x => x.keyCode === keyCode)!;
-      const audio = getSound(sound)!;
+      const audio = getSound(sound);
 
       audio.currentTime = 0;
       audio.play();
     },
-    [actions, keyCodes, slaps]
+    [actions, keyCodes, getSound]
   );
 
   // add/remove event listeners for appropriate events on load/unload
@@ -58,11 +67,6 @@ export function useDrums(): UseDrums {
       return e;
     }
     return e.keyCode;
-  };
-
-  const getSound = (soundType: SoundType) => {
-    const matches = sounds.filter(s => s.type === soundType);
-    return matches[~~(matches.length * Math.random())].audio;
   };
 
   return { playSound, actions };
