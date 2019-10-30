@@ -1,56 +1,62 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { bass, closedSlap, fingerSlap, fingerTone, mutedSlap, slap, tone } from '../audio';
+import { SoundType, Actions, UseDrums } from '../types/DrumTypes';
 /**
  *
  */
 export function useDrums(): UseDrums {
-  // add/remove event listeners for appropriate events on load/unload
-  useEffect(() => {
-    window.addEventListener('keydown', playSound);
-    return () => window.removeEventListener('keydown', playSound);
-  }, []);
-
+  // the actions we support
   const actions: Actions[] = [
-    { name: 'Bass', key: 'B', keyCode: 66, sound: new Audio(bass) },
-    { name: 'Tone', key: 'T', keyCode: 84, sound: new Audio(tone) },
-    { name: 'Slap', key: 'S', keyCode: 83, sound: new Audio(slap) }
+    { name: 'Bass', key: 'B', keyCode: 66, audio: new Audio(bass), sound: SoundType.BASS },
+    { name: 'Tone', key: 'T', keyCode: 84, audio: new Audio(tone), sound: SoundType.TONE },
+    { name: 'Slap', key: 'S', keyCode: 83, audio: new Audio(slap), sound: SoundType.SLAP }
   ];
-
+  // various types of slaps
   const slaps = [
     new Audio(closedSlap),
     new Audio(fingerSlap),
     new Audio(mutedSlap),
-    new Audio(slap)
+    new Audio(slap),
+    new Audio(fingerTone)
   ];
+  // valid keycodes that we should respond to.
   const keyCodes = actions.map(ac => ac.keyCode);
+
   /**
-   *
+   * Plays a sound on valid keypress.
    * @param e a number or keyboard event
    */
-  const playSound = (e: number | KeyboardEvent) => {
-    let keyCode: number;
+  const playSound = useCallback(
+    (e: number | KeyboardEvent) => {
+      const keyCode = parseKeyCode(e);
+      if (!keyCodes.includes(keyCode)) return;
+
+      const { audio, sound } = actions.find(x => x.keyCode === keyCode)!;
+
+      if (sound === SoundType.SLAP) {
+        const slap = slaps[~~(slaps.length * Math.random())];
+        slap.currentTime = 0;
+        slap.play();
+      } else {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    },
+    [actions, keyCodes, slaps]
+  );
+
+  // add/remove event listeners for appropriate events on load/unload
+  useEffect(() => {
+    window.addEventListener('keydown', playSound);
+    return () => window.removeEventListener('keydown', playSound);
+  }, [playSound]);
+
+  const parseKeyCode = (e: number | KeyboardEvent) => {
     if (typeof e === 'number') {
-      keyCode = e;
-    } else {
-      keyCode = e.keyCode;
+      return e;
     }
-    if (!keyCodes.includes(keyCode)) return;
-    const thing = actions.find(x => x.keyCode === keyCode);
-    thing!.sound.currentTime = 0;
-    thing!.sound.play();
+    return e.keyCode;
   };
 
   return { playSound, actions };
-}
-
-interface Actions {
-  name: string;
-  key: string;
-  keyCode: number;
-  sound: HTMLAudioElement;
-}
-
-interface UseDrums {
-  playSound: (e: number | KeyboardEvent) => void;
-  actions: Actions[];
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { ButtonRow, Button } from '../styles/ButtonRow';
 import { useDrums } from '../hooks/useDrums';
