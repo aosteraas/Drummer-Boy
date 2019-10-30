@@ -11,9 +11,9 @@ export function useDrums(): UseDrums {
   }, []);
 
   const actions: Actions[] = [
-    { name: 'Bass', key: 'B', keyCode: 66, audio: bass },
-    { name: 'Tone', key: 'T', keyCode: 84, audio: tone },
-    { name: 'Slap', key: 'S', keyCode: 83, audio: slap }
+    { name: 'Bass', key: 'B', keyCode: 66, sound: new Audio(bass) },
+    { name: 'Tone', key: 'T', keyCode: 84, sound: new Audio(tone) },
+    { name: 'Slap', key: 'S', keyCode: 83, sound: new Audio(slap) }
   ];
 
   const slaps = [
@@ -22,7 +22,7 @@ export function useDrums(): UseDrums {
     new Audio(mutedSlap),
     new Audio(slap)
   ];
-
+  const keyCodes = actions.map(ac => ac.keyCode);
   /**
    *
    * @param e a number or keyboard event
@@ -34,10 +34,10 @@ export function useDrums(): UseDrums {
     } else {
       keyCode = e.keyCode;
     }
-    const audio = document.querySelector(`audio[data-key="${keyCode}"]`) as HTMLAudioElement;
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play();
+    if (!keyCodes.includes(keyCode)) return;
+    const thing = actions.find(x => x.keyCode === keyCode);
+    thing!.sound.currentTime = 0;
+    thing!.sound.play();
   };
 
   return { playSound, actions };
@@ -47,7 +47,7 @@ interface Actions {
   name: string;
   key: string;
   keyCode: number;
-  audio: any;
+  sound: HTMLAudioElement;
 }
 
 interface UseDrums {

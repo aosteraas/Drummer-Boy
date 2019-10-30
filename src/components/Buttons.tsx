@@ -19,7 +19,6 @@ export const Buttons = () => {
         <Button key={ac.key} onClick={() => playSound(ac.keyCode)}>
           <div>{ac.name}</div>
           <Kbd>{ac.key}</Kbd>
-          <audio data-key={ac.keyCode} src={ac.audio}></audio>
         </Button>
       ))}
     </ButtonRow>
