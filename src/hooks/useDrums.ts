@@ -4,15 +4,28 @@ import { bass, closedSlap, fingerSlap, fingerTone, mutedSlap, slap, tone } from 
  *
  */
 export function useDrums(): UseDrums {
+  // add/remove event listeners for appropriate events on load/unload
+  useEffect(() => {
+    window.addEventListener('keydown', playSound);
+    return () => window.removeEventListener('keydown', playSound);
+  }, []);
+
   const actions: Actions[] = [
     { name: 'Bass', key: 'B', keyCode: 66, audio: bass },
     { name: 'Tone', key: 'T', keyCode: 84, audio: tone },
     { name: 'Slap', key: 'S', keyCode: 83, audio: slap }
   ];
 
+  const slaps = [
+    new Audio(closedSlap),
+    new Audio(fingerSlap),
+    new Audio(mutedSlap),
+    new Audio(slap)
+  ];
+
   /**
    *
-   * @param e
+   * @param e a number or keyboard event
    */
   const playSound = (e: number | KeyboardEvent) => {
     let keyCode: number;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { bass, tone, slap } from '../audio';
 import { ButtonRow, Button } from '../styles/ButtonRow';
+import { useDrums } from '../hooks/useDrums';
 
 const Kbd = styled.kbd`
   display: block;
@@ -11,29 +11,7 @@ const Kbd = styled.kbd`
 `;
 
 export const Buttons = () => {
-  const actions = [
-    { name: 'Bass', key: 'B', keyCode: 66, audio: bass },
-    { name: 'Tone', key: 'T', keyCode: 84, audio: tone },
-    { name: 'Slap', key: 'S', keyCode: 83, audio: slap }
-  ];
-
-  useEffect(() => {
-    window.addEventListener('keydown', playSound);
-    return () => window.removeEventListener('keydown', playSound);
-  }, []);
-
-  const playSound = (e: number | KeyboardEvent) => {
-    let keyCode: number;
-    if (typeof e === 'number') {
-      keyCode = e;
-    } else {
-      keyCode = e.keyCode;
-    }
-    const audio = document.querySelector(`audio[data-key="${keyCode}"]`) as HTMLAudioElement;
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play();
-  };
+  const { playSound, actions } = useDrums();
 
   return (
     <ButtonRow>
