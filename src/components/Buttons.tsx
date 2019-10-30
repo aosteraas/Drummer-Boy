@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
+import bass from '../audio/bass.wav';
+import tone from '../audio/tone.wav';
+import slap from '../audio/open-slap.wav';
 
 const Button = styled.button`
   color: #09d3ac;
@@ -26,14 +29,9 @@ const Kbd = styled.kbd`
 
 export const Buttons = () => {
   const actions = [
-    { name: 'Bass', key: 'B', keyCode: 66, audio: '/audio/bass.wav' },
-    { name: 'Tone', key: 'T', keyCode: 84, audio: '/audio/tone.wav' },
-    {
-      name: 'Slap',
-      key: 'S',
-      keyCode: 83,
-      audio: '/audio/open-slap.wav'
-    }
+    { name: 'Bass', key: 'B', keyCode: 66, audio: bass },
+    { name: 'Tone', key: 'T', keyCode: 84, audio: tone },
+    { name: 'Slap', key: 'S', keyCode: 83, audio: slap }
   ];
 
   useEffect(() => {
