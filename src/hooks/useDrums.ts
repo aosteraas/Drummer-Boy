@@ -19,6 +19,7 @@ export function useDrums(): UseDrums {
     new Audio(slap),
     new Audio(fingerTone)
   ];
+  const tones = [new Audio(tone), new Audio(fingerTone)];
   // valid keycodes that we should respond to.
   const keyCodes = actions.map(ac => ac.keyCode);
 
@@ -37,6 +38,10 @@ export function useDrums(): UseDrums {
         const slap = slaps[~~(slaps.length * Math.random())];
         slap.currentTime = 0;
         slap.play();
+      } else if (sound === SoundType.TONE) {
+        const tone = tones[~~(tones.length * Math.random())];
+        tone.currentTime = 0;
+        tone.play();
       } else {
         audio.currentTime = 0;
         audio.play();
