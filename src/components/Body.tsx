@@ -1,10 +1,16 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components/macro';
-import { left, right } from '../images/';
+import { left, right, shirt } from '../images/';
 
 const Section = styled.section`
   display: flex;
   justify-content: center;
+  background-image: url(${shirt});
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-size: 319px 456px;
+  height: 18rem;
+  align-items: flex-end;
 `;
 
 const armAnimate = keyframes`
@@ -23,8 +29,12 @@ const armAnimate = keyframes`
 `;
 
 const Arm = styled.img<ArmProps>`
-  /* transition: all 0.07s ease; */
+  width: 150px;
+  height: 110px;
   transform-origin: top ${p => p.tfOrigin};
+  :first-of-type {
+    margin-right: 26px;
+  }
   &.active {
     transform-origin: top ${p => p.tfOrigin};
     animation: ${armAnimate} 0.1s ease-in;
