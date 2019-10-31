@@ -16,7 +16,12 @@ export const Buttons = () => {
   return (
     <ButtonRow>
       {actions.map(ac => (
-        <Button key={ac.key} onClick={() => playSound(ac.keyCode)}>
+        <Button
+          id={`key-${ac.keyCode}`}
+          className="key"
+          key={ac.key}
+          onClick={() => playSound(ac.keyCode)}
+        >
           <div>{ac.name}</div>
           <Kbd>{ac.key}</Kbd>
         </Button>

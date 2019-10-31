@@ -45,7 +45,11 @@ export function useDrums(): UseDrums {
   const playSound = useCallback(
     (e: number | KeyboardEvent) => {
       const keyCode = parseKeyCode(e);
+
       if (!keyCodes.includes(keyCode)) return;
+
+      const key = document.getElementById(`key-${keyCode}`);
+      key!.classList.add('playing');
 
       const { sound } = actions.find(x => x.keyCode === keyCode)!;
       const audio = getSound(sound);
@@ -56,12 +60,25 @@ export function useDrums(): UseDrums {
     [actions, keyCodes, getSound]
   );
 
+  // removes the playing class from a button
+  const removeTransition = (e: any) => {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
+  };
+
   // add/remove event listeners for appropriate events on load/unload
   useEffect(() => {
     window.addEventListener('keydown', playSound);
-    return () => window.removeEventListener('keydown', playSound);
+    const keys = Array.from(document.querySelectorAll('.key'));
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    // cleanup
+    return () => {
+      window.removeEventListener('keydown', playSound);
+      keys.forEach(key => key.removeEventListener('transitionend', removeTransition));
+    };
   }, [playSound]);
 
+  // return the correct keycode per event source
   const parseKeyCode = (e: number | KeyboardEvent) => {
     if (typeof e === 'number') {
       return e;
