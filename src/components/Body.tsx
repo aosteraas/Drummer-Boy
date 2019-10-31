@@ -44,6 +44,7 @@ const Arm = styled.img<ArmProps>`
 interface ArmProps {
   tfOrigin: string;
 }
+
 export const Body = () => {
   return (
     <Section>

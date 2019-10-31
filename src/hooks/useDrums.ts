@@ -1,44 +1,17 @@
 import { useEffect, useCallback } from 'react';
-import { bass, closedSlap, fingerSlap, fingerTone, mutedSlap, slap, tone } from '../audio';
-import { SoundType, Actions, UseDrums } from '../types/DrumTypes';
-
+import { SoundType, UseDrums } from '../types/DrumTypes';
+import { actions, sounds, keyCodes } from '../data';
 /**
  *
  */
 export function useDrums(): UseDrums {
   const activeClass = 'active';
-  // the actions we support
-  const actions: Actions[] = [
-    { name: 'Bass', key: 'B', keyCode: 66, sound: SoundType.BASS },
-    { name: 'Tone', key: 'T', keyCode: 84, sound: SoundType.TONE },
-    { name: 'Slap', key: 'S', keyCode: 83, sound: SoundType.SLAP }
-  ];
-
-  const slaps = [
-    { audio: new Audio(closedSlap), type: SoundType.SLAP },
-    { audio: new Audio(fingerSlap), type: SoundType.SLAP },
-    { audio: new Audio(mutedSlap), type: SoundType.SLAP },
-    { audio: new Audio(slap), type: SoundType.SLAP },
-    { audio: new Audio(fingerTone), type: SoundType.SLAP }
-  ];
-
-  const tones = [
-    { audio: new Audio(tone), type: SoundType.TONE },
-    { audio: new Audio(fingerTone), type: SoundType.TONE }
-  ];
-
-  const sounds = [...slaps, ...tones, { audio: new Audio(bass), type: SoundType.BASS }];
-  // valid keycodes that we should respond to.
-  const keyCodes = actions.map(ac => ac.keyCode);
 
   // Returns a random sound of the given type
-  const getSound = useCallback(
-    (soundType: SoundType) => {
-      const matches = sounds.filter(s => s.type === soundType);
-      return matches[~~(matches.length * Math.random())].audio;
-    },
-    [sounds]
-  );
+  const getSound = useCallback((soundType: SoundType) => {
+    const matches = sounds.filter(s => s.type === soundType);
+    return matches[~~(matches.length * Math.random())].audio;
+  }, []);
 
   // add class to animate arm, also if both arms are active then clear that.
   const animateArms = useCallback(() => {
@@ -83,7 +56,7 @@ export function useDrums(): UseDrums {
       audio.currentTime = 0;
       audio.play();
     },
-    [actions, keyCodes, getSound, animateArms]
+    [getSound, animateArms]
   );
 
   // removes the playing class from a button/arm
