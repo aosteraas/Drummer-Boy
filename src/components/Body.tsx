@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components/macro';
 import { left, right } from '../images/';
 
 const Section = styled.section`
@@ -7,11 +7,38 @@ const Section = styled.section`
   justify-content: center;
 `;
 
+const armAnimate = keyframes`
+  0% {
+    transform: rotate(0deg)
+  }
+  20% {
+    transform: rotate(-10deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg)
+  }
+`;
+
+const Arm = styled.img<ArmProps>`
+  transition: all 0.07s ease;
+  transform-origin: top ${p => p.tfOrigin};
+  &.active {
+    transform-origin: top ${p => p.tfOrigin};
+    animation: ${armAnimate} 0.25s ease;
+  }
+`;
+
+interface ArmProps {
+  tfOrigin: string;
+}
 export const Body = () => {
   return (
     <Section>
-      <img width="150" src={right} />
-      <img width="150" src={left} />
+      <Arm tfOrigin="left" width="150" className="arm left" src={right} />
+      <Arm tfOrigin="right" width="150" className="arm right" src={left} />
     </Section>
   );
 };
