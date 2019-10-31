@@ -10,7 +10,7 @@ const Kbd = styled.kbd`
   background: rgba(128, 128, 128, 0.5);
 `;
 
-export const Buttons = () => {
+export const Buttons: React.FC = () => {
   const { playSound, actions } = useDrums();
 
   return (
