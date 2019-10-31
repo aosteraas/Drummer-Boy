@@ -6,6 +6,7 @@ import { SoundType, Actions, UseDrums } from '../types/DrumTypes';
  *
  */
 export function useDrums(): UseDrums {
+  const activeClass = 'active';
   // the actions we support
   const actions: Actions[] = [
     { name: 'Bass', key: 'B', keyCode: 66, sound: SoundType.BASS },
@@ -39,6 +40,30 @@ export function useDrums(): UseDrums {
     [sounds]
   );
 
+  // add class to animate arm, also if both arms are active then clear that.
+  const animateArms = useCallback(() => {
+    const arms = [...document.querySelectorAll(`img.arm`)];
+    const armsLength = arms.length;
+
+    // if both arms are inactive select one at random to animate.
+    const inactive = arms.filter(a => !a.classList.contains(activeClass));
+    if (inactive.length === armsLength) {
+      arms[~~(armsLength * Math.random())].classList.add(activeClass);
+      return;
+    }
+
+    // if we have one arm active, animate that and return
+    const active = arms.filter(a => a.classList.contains(activeClass));
+    if (active.length === 1) {
+      active[0].classList.add(activeClass);
+      return;
+    }
+    // otherwise, both arms are active and we should reset them, and also
+    // call this function again to animate
+    arms.forEach(a => a.classList.remove(activeClass));
+    animateArms();
+  }, []);
+
   /**
    * Plays a sound on valid keypress.
    * @param e a number or keyboard event
@@ -46,18 +71,11 @@ export function useDrums(): UseDrums {
   const playSound = useCallback(
     (e: number | KeyboardEvent) => {
       const keyCode = parseKeyCode(e);
-
       if (!keyCodes.includes(keyCode)) return;
       // add class to animate key
       const key = document.getElementById(`key-${keyCode}`);
       key!.classList.add('playing');
-      // add class to animate arm, also if both arms are active then clear that.
-      const arm = document.querySelector(`img:not(.active)`);
-      if (arm) {
-        arm.classList.add('active');
-      } else {
-        document.querySelectorAll(`img.arm`).forEach(arm => arm.classList.remove('active'));
-      }
+      animateArms();
 
       const { sound } = actions.find(x => x.keyCode === keyCode)!;
       const audio = getSound(sound);
@@ -65,7 +83,7 @@ export function useDrums(): UseDrums {
       audio.currentTime = 0;
       audio.play();
     },
-    [actions, keyCodes, getSound]
+    [actions, keyCodes, getSound, animateArms]
   );
 
   // removes the playing class from a button/arm
