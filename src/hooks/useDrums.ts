@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { bass, closedSlap, fingerSlap, fingerTone, mutedSlap, slap, tone } from '../audio';
 import { SoundType, Actions, UseDrums } from '../types/DrumTypes';
+
 /**
  *
  */
@@ -47,9 +48,16 @@ export function useDrums(): UseDrums {
       const keyCode = parseKeyCode(e);
 
       if (!keyCodes.includes(keyCode)) return;
-
+      // add class to animate key
       const key = document.getElementById(`key-${keyCode}`);
       key!.classList.add('playing');
+      // add class to animate arm, also if both arms are active then clear that.
+      const arm = document.querySelector(`img:not(.active)`);
+      if (arm) {
+        arm.classList.add('active');
+      } else {
+        document.querySelectorAll(`img.arm`).forEach(arm => arm.classList.remove('active'));
+      }
 
       const { sound } = actions.find(x => x.keyCode === keyCode)!;
       const audio = getSound(sound);
@@ -60,16 +68,21 @@ export function useDrums(): UseDrums {
     [actions, keyCodes, getSound]
   );
 
-  // removes the playing class from a button
+  // removes the playing class from a button/arm
   const removeTransition = (e: any) => {
     if (e.propertyName !== 'transform') return;
+    // remove playing class from key button
     e.target.classList.remove('playing');
+    // remove active arm classes
+    document.querySelectorAll(`img.arm.active`).forEach(arm => arm.classList.remove('active'));
   };
 
   // add/remove event listeners for appropriate events on load/unload
   useEffect(() => {
     window.addEventListener('keydown', playSound);
     const keys = Array.from(document.querySelectorAll('.key'));
+    // const arms = Array.from(document.querySelectorAll('.arm'));
+    // console.log(arms);
     keys.forEach(key => key.addEventListener('transitionend', removeTransition));
     // cleanup
     return () => {

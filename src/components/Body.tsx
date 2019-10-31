@@ -18,16 +18,16 @@ const armAnimate = keyframes`
     transform: rotate(10deg);
   }
   100% {
-    transform: rotate(0deg)
+    transform: rotate(0deg);
   }
 `;
 
 const Arm = styled.img<ArmProps>`
-  transition: all 0.07s ease;
+  /* transition: all 0.07s ease; */
   transform-origin: top ${p => p.tfOrigin};
   &.active {
     transform-origin: top ${p => p.tfOrigin};
-    animation: ${armAnimate} 0.25s ease;
+    animation: ${armAnimate} 0.07s ease;
   }
 `;
 

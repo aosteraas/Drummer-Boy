@@ -14,7 +14,7 @@ export const Button = styled.button`
   width: 5rem;
   height: 5rem;
   font-size: 1.5rem;
-  transition: all 0.07s ease;
+  transition: all 0.1s ease;
   &.playing {
     transform: scale(1.1);
     border-color: #ffc600;
