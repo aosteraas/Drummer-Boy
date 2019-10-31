@@ -27,7 +27,7 @@ const Arm = styled.img<ArmProps>`
   transform-origin: top ${p => p.tfOrigin};
   &.active {
     transform-origin: top ${p => p.tfOrigin};
-    animation: ${armAnimate} 0.07s ease;
+    animation: ${armAnimate} 0.1s ease;
   }
 `;
 
