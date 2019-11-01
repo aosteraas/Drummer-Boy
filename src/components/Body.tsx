@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components/macro';
-import { left, right, shirt } from '../images/';
+import { left, right, shirt, head } from '../images/';
 
 const Section = styled.section`
+  position: relative;
   display: flex;
   justify-content: center;
   background-image: url(${shirt});
@@ -28,6 +29,12 @@ const armAnimate = keyframes`
   }
 `;
 
+const Head = styled.img`
+  width: 130px;
+  position: absolute;
+  top: -100px;
+`;
+
 const Arm = styled.img<ArmProps>`
   width: 150px;
   height: 110px;
@@ -48,6 +55,7 @@ interface ArmProps {
 export const Body = () => {
   return (
     <Section>
+      <Head src={head} />
       <Arm tfOrigin="left" width="150" className="arm left" src={right} />
       <Arm tfOrigin="right" width="150" className="arm right" src={left} />
     </Section>
