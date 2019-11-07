@@ -10,21 +10,25 @@ export const actions: Actions[] = [
 
 // various slap sounds
 const slaps = [
-  { audio: new Audio(closedSlap), type: SoundType.SLAP },
-  { audio: new Audio(fingerSlap), type: SoundType.SLAP },
-  { audio: new Audio(mutedSlap), type: SoundType.SLAP },
-  { audio: new Audio(slap), type: SoundType.SLAP },
-  { audio: new Audio(fingerTone), type: SoundType.SLAP }
+  { src: closedSlap, audio: new Audio(closedSlap), type: SoundType.SLAP },
+  { src: fingerSlap, audio: new Audio(fingerSlap), type: SoundType.SLAP },
+  { src: mutedSlap, audio: new Audio(mutedSlap), type: SoundType.SLAP },
+  { src: slap, audio: new Audio(slap), type: SoundType.SLAP },
+  { src: fingerTone, audio: new Audio(fingerTone), type: SoundType.SLAP }
 ];
 
 // the two types of tones
 const tones = [
-  { audio: new Audio(tone), type: SoundType.TONE },
-  { audio: new Audio(fingerTone), type: SoundType.TONE }
+  { src: tone, audio: new Audio(tone), type: SoundType.TONE },
+  { src: fingerTone, audio: new Audio(fingerTone), type: SoundType.TONE }
 ];
 
 // the complete list of sounds
-export const sounds = [...slaps, ...tones, { audio: new Audio(bass), type: SoundType.BASS }];
+export const sounds = [
+  ...slaps,
+  ...tones,
+  { src: bass, audio: new Audio(bass), type: SoundType.BASS }
+];
 
 // valid keycodes that we should respond to.
 export const keyCodes = actions.map(ac => ac.keyCode);

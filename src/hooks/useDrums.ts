@@ -10,7 +10,7 @@ export function useDrums(): UseDrums {
   // Returns a random sound of the given type
   const getSound = useCallback((soundType: SoundType) => {
     const matches = sounds.filter(s => s.type === soundType);
-    return matches[~~(matches.length * Math.random())].audio;
+    return matches[~~(matches.length * Math.random())];
   }, []);
 
   // add class to animate arm, also if both arms are active then clear that.
@@ -52,9 +52,8 @@ export function useDrums(): UseDrums {
 
       const { sound } = actions.find(x => x.keyCode === keyCode)!;
       const audio = getSound(sound);
-
-      audio.currentTime = 0;
-      audio.play();
+      const playable = new Audio(audio.src);
+      playable.play();
     },
     [getSound, animateArms]
   );
