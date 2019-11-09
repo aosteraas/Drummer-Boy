@@ -15,3 +15,13 @@ export interface UseDrums {
   playSound: (e: number | KeyboardEvent) => void;
   actions: Actions[];
 }
+
+export interface SoundData {
+  type: SoundType;
+  buffer: ArrayBuffer;
+}
+
+export interface Parsed {
+  type: SoundType;
+  audio: AudioBuffer;
+}
