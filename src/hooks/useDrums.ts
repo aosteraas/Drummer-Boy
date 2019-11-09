@@ -3,6 +3,16 @@ import { SoundType, UseDrums, Parsed } from '../types/DrumTypes';
 import { actions, sounds, keyCodes } from '../data';
 import { clone } from './utils';
 
+// polyfill for Safari
+if (!window.AudioContext && window.webkitAudioContext) {
+  const oldFunc = webkitAudioContext.prototype.decodeAudioData;
+  webkitAudioContext.prototype.decodeAudioData = function(arraybuffer: ArrayBuffer) {
+    return new Promise((resolve, reject) => {
+      oldFunc.call(this, arraybuffer, resolve, reject);
+    });
+  };
+}
+
 // A wise man once said "you should probably wrap this in a try catch"
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -27,7 +37,6 @@ export function useDrums(): UseDrums {
     });
     // It's an array of promises so we can await them all completing
     const soundData = await Promise.all(requests);
-
     // However the data type is `ArrayBuffer`, which is a byte array in basically
     // any other language
     const parsable = soundData.map(async d => {
@@ -117,7 +126,6 @@ export function useDrums(): UseDrums {
     window.addEventListener('keydown', playSound);
     const keys = Array.from(document.querySelectorAll('.key'));
     // const arms = Array.from(document.querySelectorAll('.arm'));
-    // console.log(arms);
     keys.forEach(key => key.addEventListener('transitionend', removeTransition));
     // cleanup
     return () => {
